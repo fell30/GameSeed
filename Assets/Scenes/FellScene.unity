@@ -463,6 +463,14 @@ MonoBehaviour:
         type: 3}
       _neededSpawner: {fileID: 1158602752}
       _spawnDelay: 0
+    - _enemy: {fileID: 4700422076330935960, guid: 9626bcb6024cd6149aa6440c42d31644,
+        type: 3}
+      _neededSpawner: {fileID: 1784193378}
+      _spawnDelay: 3
+    - _enemy: {fileID: 4700422076330935960, guid: 9626bcb6024cd6149aa6440c42d31644,
+        type: 3}
+      _neededSpawner: {fileID: 390316682}
+      _spawnDelay: 3
   enemyTarget: {fileID: 2013811290}
 --- !u!4 &1031132540
 Transform:
