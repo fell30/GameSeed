@@ -3,12 +3,15 @@ using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
+    [Header("Wave Configuration")]
     [SerializeField] private Wave[] _waves;
 
     private int _currentEnemyIndex;
     private int _currentWaveIndex;
     private int _enemiesLeftToSpawn;
+
     private bool _isSpawning;
+    private bool _waitingForNextWave;
 
     private void Start()
     {
@@ -19,65 +22,60 @@ public class WaveSpawner : MonoBehaviour
     {
         if (_currentWaveIndex < _waves.Length)
         {
+            Debug.Log($"[WaveSpawner] Starting wave {_currentWaveIndex + 1}");
+
             _currentEnemyIndex = 0;
             _enemiesLeftToSpawn = _waves[_currentWaveIndex].WaveSettings.Length;
-            if (!_isSpawning)
-            {
-                StartCoroutine(SpawnEnemyInWave());
-            }
+
+            _isSpawning = true;
+            _waitingForNextWave = false;
+
+            StartCoroutine(SpawnEnemyInWave());
         }
         else
         {
-            Debug.Log("All waves completed!");
+            Debug.Log("[WaveSpawner] All waves completed!");
         }
     }
 
     private IEnumerator SpawnEnemyInWave()
     {
-        _isSpawning = true;
-
         while (_enemiesLeftToSpawn > 0)
         {
             WaveSettings setting = _waves[_currentWaveIndex].WaveSettings[_currentEnemyIndex];
 
             yield return new WaitForSeconds(setting.SpawnDelay);
 
-            Instantiate(setting.Enemy, setting.NeededSpawner.transform.position, Quaternion.identity);
+            Instantiate(setting.Enemy,
+                        setting.NeededSpawner.transform.position,
+                        Quaternion.identity);
 
-            _enemiesLeftToSpawn--;
             _currentEnemyIndex++;
+            _enemiesLeftToSpawn--;
+        }
+
+        _isSpawning = false;
+        _waitingForNextWave = true;
+
+        StartCoroutine(WaitUntilAllEnemiesDefeated());
+    }
+
+    private IEnumerator WaitUntilAllEnemiesDefeated()
+    {
+        while (GameObject.FindGameObjectsWithTag("Enemy").Length > 0)
+        {
+            yield return new WaitForSeconds(0.5f);
         }
 
         _currentWaveIndex++;
-        _isSpawning = false;
         StartNextWave();
     }
 
     public void LaunchWave()
     {
-        if (!_isSpawning)
+        if (!_isSpawning && !_waitingForNextWave)
         {
             StartNextWave();
         }
     }
-}
-
-[System.Serializable]
-public class Wave
-{
-    [SerializeField] private WaveSettings[] waveSettings;
-    public WaveSettings[] WaveSettings => waveSettings;
-}
-
-[System.Serializable]
-public class WaveSettings
-{
-    [SerializeField] private GameObject _enemy;
-    public GameObject Enemy => _enemy;
-
-    [SerializeField] private GameObject _neededSpawner;
-    public GameObject NeededSpawner => _neededSpawner;
-
-    [SerializeField] private float _spawnDelay;
-    public float SpawnDelay => _spawnDelay;
 }
