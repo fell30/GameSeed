@@ -1,36 +1,75 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyNavAI : MonoBehaviour
 {
-    [SerializeField] private Transform target;
+    [Header("Targeting")]
+    [SerializeField] private float targetOffsetRadius = 2f;
+    [SerializeField] private float reachThreshold = 1.5f; // Jarak dekat ke target untuk deteksi manual
+
+    private Transform target;
     private NavMeshAgent agent;
+    private bool hasDestination = false;
+
+    private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
 
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-
-        if (target != null)
-        {   
-            agent.SetDestination(target.position);
-        }
+        TrySetDestination();
     }
 
     private void Update()
     {
-        if (target != null)
+        if (!hasDestination && target != null)
         {
-            agent.SetDestination(target.position);
+            TrySetDestination();
+        }
+
+        // Cek apakah sudah dekat sekali dengan target (fallback kalau OnTrigger gagal)
+        if (target != null && Vector3.Distance(transform.position, target.position) <= reachThreshold)
+        {
+            ReachPlayerBase();
         }
     }
 
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
+        hasDestination = false;
+    }
 
-        if (agent != null && target != null) 
-            agent.SetDestination(target.position); ;
+    private void TrySetDestination()
+    {
+        if (agent == null || target == null) return;
+
+        Vector3 offset = Random.insideUnitSphere * targetOffsetRadius;
+        offset.y = 0;
+
+        Vector3 destination = target.position + offset;
+        agent.SetDestination(destination);
+
+        hasDestination = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PlayerBase"))
+        {
+            ReachPlayerBase();
+        }
+    }
+
+    private void ReachPlayerBase()
+    {
+        Debug.Log("Enemy reached PlayerBase!");
+
+        // Optional: Kalau ada sistem health
+        // var hp = target.GetComponent<PlayerBaseHealth>();
+        // if (hp != null) hp.TakeDamage(1);
+
+        //Destroy(gameObject);
     }
 }
