@@ -48,7 +48,7 @@ public class WaveSpawner : MonoBehaviour
             yield return new WaitForSeconds(setting.SpawnDelay);
 
             Vector3 spawnPos = setting.NeededSpawner.transform.position;
-            spawnPos.y = 0.2f; // pastikan spawn di dekat tanah
+            spawnPos.y = 0.2f; 
 
             GameObject newEnemy = Instantiate(setting.Enemy, spawnPos, Quaternion.identity);
 
