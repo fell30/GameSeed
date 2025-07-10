@@ -4,12 +4,17 @@ using UnityEngine.AI;
 public class EnemyNavAI : MonoBehaviour
 {
     [Header("Targeting")]
+    [SerializeField] private float detectPlayerRange = 5f;
+    [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private float targetOffsetRadius = 2f;
-    [SerializeField] private float reachThreshold = 1.5f; // Jarak dekat ke target untuk deteksi manual
+    [SerializeField] private float reachThreshold = 1.5f;
 
-    private Transform target;
+    private Transform player;
+    private Transform baseTarget;
+    private Transform currentTarget;
+
     private NavMeshAgent agent;
-    private bool hasDestination = false;
+    private bool chasingPlayer = false;
 
     private void Awake()
     {
@@ -18,40 +23,68 @@ public class EnemyNavAI : MonoBehaviour
 
     private void Start()
     {
-        TrySetDestination();
+        // Cari Player secara otomatis saat runtime
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+        else
+        {
+            Debug.LogWarning("Tidak ditemukan GameObject dengan tag 'Player'");
+        }
+
+        if (baseTarget != null)
+        {
+            SetTarget(baseTarget);
+        }
     }
 
     private void Update()
     {
-        if (!hasDestination && target != null)
+        if (player != null && Vector3.Distance(transform.position, player.position) < detectPlayerRange)
         {
-            TrySetDestination();
+            chasingPlayer = true;
+            currentTarget = player;
+            agent.SetDestination(player.position);
+        }
+        else
+        {
+            if (chasingPlayer)
+            {
+                chasingPlayer = false;
+                currentTarget = baseTarget;
+                TrySetDestination();
+            }
         }
 
-        // Cek apakah sudah dekat sekali dengan target (fallback kalau OnTrigger gagal)
-        if (target != null && Vector3.Distance(transform.position, target.position) <= reachThreshold)
+        if (chasingPlayer && player != null && Vector3.Distance(transform.position, player.position) <= attackRange)
+        {
+            AttackPlayer();
+        }
+
+        if (!chasingPlayer && baseTarget != null && Vector3.Distance(transform.position, baseTarget.position) <= reachThreshold)
         {
             ReachPlayerBase();
         }
     }
 
-    public void SetTarget(Transform newTarget)
+    public void SetTarget(Transform newBaseTarget)
     {
-        target = newTarget;
-        hasDestination = false;
+        baseTarget = newBaseTarget;
+        currentTarget = newBaseTarget;
+        TrySetDestination();
     }
 
     private void TrySetDestination()
     {
-        if (agent == null || target == null) return;
+        if (agent == null || currentTarget == null) return;
 
         Vector3 offset = Random.insideUnitSphere * targetOffsetRadius;
         offset.y = 0;
 
-        Vector3 destination = target.position + offset;
+        Vector3 destination = currentTarget.position + offset;
         agent.SetDestination(destination);
-
-        hasDestination = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -65,11 +98,10 @@ public class EnemyNavAI : MonoBehaviour
     private void ReachPlayerBase()
     {
         Debug.Log("Enemy reached PlayerBase!");
+    }
 
-        // Optional: Kalau ada sistem health
-        // var hp = target.GetComponent<PlayerBaseHealth>();
-        // if (hp != null) hp.TakeDamage(1);
-
-        //Destroy(gameObject);
+    private void AttackPlayer()
+    {
+        Debug.Log("Enemy attacked the Player!");
     }
 }
