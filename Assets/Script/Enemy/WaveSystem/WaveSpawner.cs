@@ -5,7 +5,10 @@ public class WaveSpawner : MonoBehaviour
 {
     [Header("Wave Configuration")]
     [SerializeField] private Wave[] _waves;
-    [SerializeField] private Transform enemyTarget;
+
+    [Header("Target References")]
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform enemyTarget; // untuk PlayerBase
 
     private int _currentEnemyIndex;
     private int _currentWaveIndex;
@@ -48,15 +51,15 @@ public class WaveSpawner : MonoBehaviour
             yield return new WaitForSeconds(setting.SpawnDelay);
 
             Vector3 spawnPos = setting.NeededSpawner.transform.position;
-            spawnPos.y = 0.2f; 
+            spawnPos.y = 0.2f; // Biar di atas plane
 
             GameObject newEnemy = Instantiate(setting.Enemy, spawnPos, Quaternion.identity);
 
-
-            EnemyNavAI ai = newEnemy.GetComponent<EnemyNavAI>();
-            if (ai != null && enemyTarget != null)
+            // Setup FSM enemy
+            Enemy fsmEnemy = newEnemy.GetComponent<Enemy>();
+            if (fsmEnemy != null)
             {
-                ai.SetTarget(enemyTarget);
+                fsmEnemy.SetTargets(player, enemyTarget);
             }
 
             _currentEnemyIndex++;

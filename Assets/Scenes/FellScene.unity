@@ -496,6 +496,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58907eb091655fd4abf7dbbdb47097f4, type: 3}
+--- !u!4 &539489953 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2684683926381496946, guid: 58907eb091655fd4abf7dbbdb47097f4,
+    type: 3}
+  m_PrefabInstance: {fileID: 407435299}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1031132538
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,6 +545,7 @@ MonoBehaviour:
         type: 3}
       _neededSpawner: {fileID: 390316682}
       _spawnDelay: 3
+  player: {fileID: 539489953}
   enemyTarget: {fileID: 2013811290}
 --- !u!4 &1031132540
 Transform:
