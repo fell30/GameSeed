@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: HighwayTexture
-    second: {fileID: 2800000, guid: 7ed2c319776a00c44b314702f6b65972, type: 3}
+    second: {fileID: 2800000, guid: 8adbb9839b4cac44aa5d313ca7a8f875, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
