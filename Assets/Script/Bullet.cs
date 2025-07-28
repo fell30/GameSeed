@@ -11,7 +11,7 @@ public class Bullet : MonoBehaviour
         if (col.gameObject.tag != "Player" && col.gameObject.tag != "Bullet" && !Collision)
         {
             Collision = true;
-            Destroy(gameObject);
+
 
         }
     }
