@@ -11,6 +11,7 @@ public class EnemyHealth : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
+        Debug.Log($"{gameObject.name} spawned with {currentHealth} HP.");
     }
 
     
