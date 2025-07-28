@@ -1,63 +1,50 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Pistol : Weapon
+public class Pistol : MonoBehaviour
 {
-    [Header("Pistol Specific")]
-    public GameObject bulletHolePrefab;
-    public float bulletForce = 30f;
+    public float damage;
+    public float range = 100f;
+    public float force = 10f;
+    public Camera fpsCam;
+    public ParticleSystem muzzleFlash;
+    public GameObject impactEffect;
+    public StressReceiver stressReceiver;
 
-    public override void Fire()
+
+    void Update()
     {
-        if (currentAmmo <= 0)
+        if (Input.GetButtonDown("Fire1"))
         {
-            Debug.Log("Out of ammo! Press R to reload.");
-            return;
+            Shoot();
         }
-
-        // Set waktu untuk tembakan berikutnya
-        nextTimeToFire = Time.time + fireRate;
-        currentAmmo--;
-
-        // Play effects
-        PlayShootEffects();
-
-        // Gunakan direction yang akurat dari kamera
-        Vector3 shootDirection = GetShootDirection();
-        Vector3 rayOrigin = firePoint != null ? firePoint.position : transform.position;
-
-        // Raycast untuk hit detection
-        RaycastHit hit;
-        if (Physics.Raycast(rayOrigin, shootDirection, out hit, range))
-        {
-            Debug.Log("Hit: " + hit.collider.name + " at distance: " + hit.distance);
-
-
-            Debug.DrawRay(rayOrigin, shootDirection * hit.distance, Color.red, 1f);
-
-
-
-
-            if (bulletHolePrefab != null)
-            {
-                GameObject bulletHole = Instantiate(bulletHolePrefab, hit.point + hit.normal * 0.001f, Quaternion.LookRotation(hit.normal));
-                Destroy(bulletHole, 10f);
-            }
-
-            // Add force jika object punya Rigidbody
-            Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddForce(-hit.normal * bulletForce);
-            }
-        }
-        else
-        {
-            // Debug line untuk miss
-            Debug.DrawRay(rayOrigin, shootDirection * range, Color.yellow, 1f);
-        }
-
-        Debug.Log(weaponName + " fired! Ammo left: " + currentAmmo);
     }
+
+    void Shoot()
+    {
+        muzzleFlash.Play();
+        stressReceiver.InduceStress(0.15f);
+        RaycastHit hit;
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        {
+            Debug.Log(hit.transform.name);
+            EnemyHealth enemyHealth = hit.transform.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(damage);
+            }
+            if (hit.rigidbody != null)
+            {
+                hit.rigidbody.AddForce(-hit.normal * force);
+            }
+            // GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            // Destroy(impactGO, 2f);
+        }
+    }
+
 }
+
+

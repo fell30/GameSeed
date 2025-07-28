@@ -6,12 +6,17 @@ public abstract class Weapon : MonoBehaviour
 {
     [Header("Weapon Stats")]
     public string weaponName;
-    public int damage = 25;
+    public float damage = 25f; // Ubah ke float untuk kompatibilitas
     public float fireRate = 0.5f; // Waktu delay antar tembakan
     public int maxAmmo = 30;
     public int currentAmmo;
     public float reloadTime = 2f;
     public float range = 100f;
+    public float bulletSpeed = 1000f; // Kecepatan bullet (untuk projectile mode)
+
+    [Header("Bullet Type")]
+    public bool useProjectile = false; // Toggle antara hitscan vs projectile
+    public GameObject bulletPrefab; // Prefab bullet untuk projectile mode
 
     [Header("Effects")]
     public ParticleSystem muzzleFlash;
@@ -118,7 +123,42 @@ public abstract class Weapon : MonoBehaviour
         return Physics.Raycast(rayOrigin, rayDirection, out hit, range);
     }
 
-    // Method untuk mendapatkan arah tembakan yang akurat
+    // Method untuk spawn projectile bullet
+    protected virtual void FireProjectile()
+    {
+        if (bulletPrefab == null)
+        {
+            Debug.LogWarning("Bullet prefab not assigned!");
+
+            return;
+        }
+
+
+        Vector3 shootDirection = GetShootDirection();
+        Vector3 spawnPosition = firePoint != null ? firePoint.position : transform.position;
+
+        // Spawn bullet
+        GameObject bullet = Instantiate(bulletPrefab, spawnPosition, Quaternion.LookRotation(shootDirection));
+
+        // Set velocity
+        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+        if (bulletRb != null)
+        {
+            bulletRb.velocity = shootDirection * bulletSpeed;
+        }
+
+        // Set bullet properties
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        if (bulletScript != null)
+        {
+            bulletScript.damage = damage;
+            bulletScript.range = range;
+            bulletScript.origin = spawnPosition;
+        }
+
+        // Auto destroy bullet setelah waktu tertentu
+        Destroy(bullet, range / bulletSpeed + 2f);
+    }
     protected virtual Vector3 GetShootDirection()
     {
         Camera playerCamera = Camera.main;
