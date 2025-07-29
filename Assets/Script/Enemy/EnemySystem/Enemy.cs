@@ -85,4 +85,13 @@ public class Enemy : MonoBehaviour
             Debug.LogWarning("Animator belum di-assign!");
         }
     }
+
+    public void SetAttackAnimation(bool isAttacking)
+    {
+        if (animator != null)
+        {
+            Debug.Log("SetAttackAnimation dipanggil, nilai: " + isAttacking);
+            animator.SetBool("isAttacking", isAttacking);
+        }
+    }
 }

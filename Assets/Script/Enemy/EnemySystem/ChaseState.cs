@@ -9,7 +9,7 @@ public class ChaseState : IEnemyState
         this.enemy = enemy;
         Debug.Log("ChaseState: Chasing player...");
 
-        // ✅ Aktifkan animasi jalan
+        //  Aktifkan animasi jalan
         enemy.SetWalkingAnimation(true);
     }
 
