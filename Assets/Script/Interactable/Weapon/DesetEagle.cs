@@ -13,6 +13,7 @@ public class Pistol : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
     public StressReceiver stressReceiver;
+    public AudioClip shootSound;
 
 
     void Update()
@@ -27,6 +28,7 @@ public class Pistol : MonoBehaviour
     {
         muzzleFlash.Play();
         stressReceiver.InduceStress(0.15f);
+        AudioSource.PlayClipAtPoint(shootSound, transform.position);
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
@@ -40,8 +42,8 @@ public class Pistol : MonoBehaviour
             {
                 hit.rigidbody.AddForce(-hit.normal * force);
             }
-            // GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            // Destroy(impactGO, 2f);
+            GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            Destroy(impactGO, 2f);
         }
     }
 
