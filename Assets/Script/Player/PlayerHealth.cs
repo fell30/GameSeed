@@ -45,6 +45,11 @@ public class PlayerHealth : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            TakeDamage(10f);
+        }
+
     }
 
     public void UpdateHealthUI()

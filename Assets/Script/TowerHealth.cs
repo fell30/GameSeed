@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,6 +32,7 @@ public class TowerHealth : MonoBehaviour
 
         // Pastikan health tidak kurang dari 0
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
 
         // Update slider
         UpdateHealthSlider();
