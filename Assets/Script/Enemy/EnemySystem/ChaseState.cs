@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ChaseState : IEnemyState
 {
@@ -8,6 +8,9 @@ public class ChaseState : IEnemyState
     {
         this.enemy = enemy;
         Debug.Log("ChaseState: Chasing player...");
+
+        //  Aktifkan animasi jalan
+        enemy.SetWalkingAnimation(true);
     }
 
     public void Update()
@@ -29,5 +32,8 @@ public class ChaseState : IEnemyState
     public void Exit()
     {
         Debug.Log("Exit Chase");
+
+        //  Matikan animasi jalan
+        enemy.SetWalkingAnimation(false);
     }
 }

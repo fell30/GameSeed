@@ -2,10 +2,12 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour
 {
     private IEnemyState currentState;
     private NavMeshAgent agent;
+    private Animator animator;
 
     public Transform playerTarget { get; private set; }
     public Transform baseTarget { get; private set; }
@@ -17,11 +19,20 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
     {
-        ChangeState(new IdleState());
+        // Cek apakah player dalam jangkauan, mulai langsung dengan state yang sesuai
+        if (IsPlayerInRange())
+        {
+            ChangeState(new ChaseState());
+        }
+        else
+        {
+            ChangeState(new GoToBaseState());
+        }
     }
 
     private void Update()
@@ -47,18 +58,40 @@ public class Enemy : MonoBehaviour
     public bool IsPlayerInRange()
     {
         return playerTarget != null &&
-            Vector3.Distance(transform.position, playerTarget.position) <= detectPlayerRange;
+               Vector3.Distance(transform.position, playerTarget.position) <= detectPlayerRange;
     }
 
     public bool IsAtBase()
     {
         return baseTarget != null &&
-            Vector3.Distance(transform.position, baseTarget.position) <= attackRange;
+               Vector3.Distance(transform.position, baseTarget.position) <= attackRange;
     }
 
     public bool IsNearPlayer()
     {
         return playerTarget != null &&
-            Vector3.Distance(transform.position, playerTarget.position) <= attackRange;
+               Vector3.Distance(transform.position, playerTarget.position) <= attackRange;
+    }
+
+    public void SetWalkingAnimation(bool isWalking)
+    {
+        if (animator != null)
+        {
+            Debug.Log("SetWalkingAnimation dipanggil, nilai: " + isWalking);
+            animator.SetBool("isWalking", isWalking);
+        }
+        else
+        {
+            Debug.LogWarning("Animator belum di-assign!");
+        }
+    }
+
+    public void SetAttackAnimation(bool isAttacking)
+    {
+        if (animator != null)
+        {
+            Debug.Log("SetAttackAnimation dipanggil, nilai: " + isAttacking);
+            animator.SetBool("isAttacking", isAttacking);
+        }
     }
 }

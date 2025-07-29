@@ -8,7 +8,7 @@ public class WaveSpawner : MonoBehaviour
 
     [Header("Target References")]
     [SerializeField] private Transform player;
-    [SerializeField] private Transform enemyTarget; // untuk PlayerBase
+    [SerializeField] private Transform enemyTarget; // Misalnya: PlayerBase
 
     private int _currentEnemyIndex;
     private int _currentWaveIndex;
@@ -16,6 +16,16 @@ public class WaveSpawner : MonoBehaviour
 
     private bool _isSpawning;
     private bool _waitingForNextWave;
+
+    private void Awake()
+    {
+        // Jika player atau enemyTarget belum di-assign di Inspector, coba cari otomatis
+        if (player == null)
+            player = GameObject.FindWithTag("Player")?.transform;
+
+        if (enemyTarget == null)
+            enemyTarget = GameObject.FindWithTag("PlayerBase")?.transform;
+    }
 
     private void Start()
     {
@@ -51,7 +61,7 @@ public class WaveSpawner : MonoBehaviour
             yield return new WaitForSeconds(setting.SpawnDelay);
 
             Vector3 spawnPos = setting.NeededSpawner.transform.position;
-            spawnPos.y = 0.2f; // Biar di atas plane
+            spawnPos.y = 0.2f; // agar muncul di atas permukaan
 
             GameObject newEnemy = Instantiate(setting.Enemy, spawnPos, Quaternion.identity);
 

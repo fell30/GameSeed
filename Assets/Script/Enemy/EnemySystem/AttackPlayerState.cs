@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AttackPlayerState : IEnemyState
 {
@@ -10,7 +10,12 @@ public class AttackPlayerState : IEnemyState
     {
         this.enemy = enemy;
         timer = 0f;
+
         Debug.Log("AttackPlayerState: Attacking player...");
+
+        // Aktifkan animasi attack
+        enemy.SetWalkingAnimation(false);
+        enemy.SetAttackAnimation(true);
     }
 
     public void Update()
@@ -27,6 +32,7 @@ public class AttackPlayerState : IEnemyState
         {
             Debug.Log("Enemy attacks the player!");
             timer = 0f;
+
             // TODO: Apply damage to player here
         }
     }
@@ -34,5 +40,8 @@ public class AttackPlayerState : IEnemyState
     public void Exit()
     {
         Debug.Log("Exit AttackPlayer");
+
+        // Nonaktifkan animasi attack saat keluar dari state
+        enemy.SetAttackAnimation(false);
     }
 }
