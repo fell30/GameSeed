@@ -14,9 +14,14 @@ public class Bullet : MonoBehaviour
         {
 
             ZombieEnemy enemy = col.GetComponent<ZombieEnemy>();
+            ZombieFast enemyFast = col.GetComponent<ZombieFast>();
             if (enemy != null)
             {
                 enemy.TakeDamage(damage);
+            }
+            if (enemyFast != null)
+            {
+                enemyFast.TakeDamage(damage);
             }
             if (ImpactEffect != null)
             {
