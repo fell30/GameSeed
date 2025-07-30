@@ -1,34 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealthBar : MonoBehaviour
 {
-    [Header("Enemy Health Settings")]
-    public float maxHealth = 100f;
-    private float currentHealth;
+    public Slider slider;
 
-    private void Awake()
+
+
+    public void SetHealth(float current, float max)
     {
-        currentHealth = maxHealth;
-        Debug.Log($"{gameObject.name} spawned with {currentHealth} HP.");
+        if (slider != null)
+            slider.value = current / max;
+        Debug.Log($"Health set: {current}/{max}");
     }
 
-    
-    public void TakeDamage(float damageAmount)
-    {
-        currentHealth -= damageAmount;
-        Debug.Log($"{gameObject.name} took {damageAmount} damage. Remaining health: {currentHealth}");
-
-        if (currentHealth <= 0f)
-        {
-            Die();
-        }
-    }
-
-    private void Die()
-    {
-        Debug.Log($"{gameObject.name} has died.");
-        Destroy(gameObject); 
-    }
 }

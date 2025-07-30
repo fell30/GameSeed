@@ -82,14 +82,11 @@ public class Pistol : MonoBehaviour
         {
             Debug.Log(hit.transform.name);
 
-            EnemyHealth enemyHealth = hit.transform.GetComponent<EnemyHealth>();
+
             TowerHealth towerHealth = hit.transform.GetComponent<TowerHealth>();
             ZombieEnemy zombieEnemy = hit.transform.GetComponent<ZombieEnemy>();
 
-            if (enemyHealth != null)
-            {
-                enemyHealth.TakeDamage(damage);
-            }
+
             if (towerHealth != null)
             {
                 towerHealth.TakeDamage(damage);

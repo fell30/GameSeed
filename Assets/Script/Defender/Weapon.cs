@@ -25,6 +25,10 @@ public class Weapon : MonoBehaviour
     public AudioClip fireClip;
     AudioSource audioSource;
 
+    [Header("Animation")]
+    public Animator weaponAnimator;
+
+
     [HideInInspector] public bool canShoot = false;
 
     IEnumerator Start()
@@ -49,6 +53,12 @@ public class Weapon : MonoBehaviour
             {
                 GameObject bullet = Instantiate(projectile, shootPoint.position, shootPoint.rotation);
                 bullet.GetComponent<Rigidbody>().AddForce(shootPoint.forward * force);
+                if (weaponAnimator != null)
+                {
+                    weaponAnimator.SetTrigger("Shoot");
+
+                }
+
 
                 if (secondProjectile)
                 {

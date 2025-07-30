@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+
 
 public class ZombieEnemy : MonoBehaviour
 {
@@ -14,6 +16,11 @@ public class ZombieEnemy : MonoBehaviour
     public Animator animator;
     public NavMeshAgent agent;
     public Transform targetTower;
+    [Header("Health Bar")]
+    public EnemyHealthBar healthBar;
+    [Header("Effects")]
+    public GameObject explosionEffect;
+
 
     private float currentHealth;
     private bool isDead = false;
@@ -23,6 +30,9 @@ public class ZombieEnemy : MonoBehaviour
     {
         currentHealth = maxHealth;
         agent.SetDestination(targetTower.position);
+        healthBar.SetHealth(currentHealth, maxHealth);
+
+
     }
 
     void Update()
@@ -74,6 +84,10 @@ public class ZombieEnemy : MonoBehaviour
         currentHealth -= damage;
         animator.SetTrigger("isHit");
         agent.isStopped = true;
+        if (healthBar != null)
+        {
+            healthBar.SetHealth(currentHealth, maxHealth);
+        }
 
 
 
@@ -93,6 +107,18 @@ public class ZombieEnemy : MonoBehaviour
         agent.enabled = false; // wajib
 
         animator.SetTrigger("isDead");
-        Destroy(gameObject, 3f);
+        StartCoroutine(deathSequenece());
+
+    }
+    private IEnumerator deathSequenece()
+    {
+        Destroy(gameObject, 2f);
+        yield return new WaitForSeconds(1f);
+        if (explosionEffect != null)
+        {
+            GameObject explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Destroy(explosion, 1f);
+
+        }
     }
 }

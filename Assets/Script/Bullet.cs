@@ -12,11 +12,7 @@ public class Bullet : MonoBehaviour
     {
         if (col.CompareTag("Enemy"))
         {
-            EnemyHealth enemyHealth = col.GetComponent<EnemyHealth>();
-            if (enemyHealth != null)
-            {
-                enemyHealth.TakeDamage(damage);
-            }
+
 
             if (ImpactEffect != null)
             {
