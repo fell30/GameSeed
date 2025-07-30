@@ -8,6 +8,8 @@ public class ZombieEnemy : MonoBehaviour
     public float attackDamage = 10f;
     public float attackInterval = 1.5f;
 
+
+
     [Header("References")]
     public Animator animator;
     public NavMeshAgent agent;
@@ -71,6 +73,9 @@ public class ZombieEnemy : MonoBehaviour
 
         currentHealth -= damage;
         animator.SetTrigger("isHit");
+        agent.isStopped = true;
+
+
 
         if (currentHealth <= 0f)
         {
@@ -78,10 +83,15 @@ public class ZombieEnemy : MonoBehaviour
         }
     }
 
+
+
     void Die()
     {
         isDead = true;
         agent.isStopped = true;
+
+        agent.enabled = false; // wajib
+
         animator.SetTrigger("isDead");
         Destroy(gameObject, 3f);
     }
