@@ -13,27 +13,31 @@ public class AttackPlayerState : IEnemyState
 
         Debug.Log("AttackPlayerState: Attacking player...");
 
-        // Aktifkan animasi attack
+        // Stop movement and set animations
+        enemy.GetAgent().isStopped = true;
         enemy.SetWalkingAnimation(false);
         enemy.SetAttackAnimation(true);
     }
 
     public void Update()
     {
-        timer += Time.deltaTime;
-
+        // Cek jika player menjauh
         if (!enemy.IsNearPlayer())
         {
             enemy.ChangeState(new ChaseState());
             return;
         }
 
+        // Serang berdasarkan cooldown
+        timer += Time.deltaTime;
+
         if (timer >= attackCooldown)
         {
             Debug.Log("Enemy attacks the player!");
             timer = 0f;
 
-            // TODO: Apply damage to player here
+            // TODO: Implement damage to player here
+            // e.g., player.TakeDamage(damageAmount);
         }
     }
 
@@ -41,7 +45,8 @@ public class AttackPlayerState : IEnemyState
     {
         Debug.Log("Exit AttackPlayer");
 
-        // Nonaktifkan animasi attack saat keluar dari state
+        // Reset attack animation and resume movement
         enemy.SetAttackAnimation(false);
+        enemy.GetAgent().isStopped = false;
     }
 }

@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        // Cek apakah player dalam jangkauan, mulai langsung dengan state yang sesuai
+        
         if (IsPlayerInRange())
         {
             ChangeState(new ChaseState());
@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
     public bool IsNearPlayer()
     {
         return playerTarget != null &&
-               Vector3.Distance(transform.position, playerTarget.position) <= attackRange;
+               Vector3.Distance(transform.position, playerTarget.position) <= attackRange + 0.1f;
     }
 
     public void SetWalkingAnimation(bool isWalking)

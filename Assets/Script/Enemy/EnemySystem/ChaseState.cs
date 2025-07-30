@@ -8,15 +8,15 @@ public class ChaseState : IEnemyState
     {
         this.enemy = enemy;
         Debug.Log("ChaseState: Chasing player...");
-
-        //  Aktifkan animasi jalan
         enemy.SetWalkingAnimation(true);
+        enemy.SetAttackAnimation(false); // pastikan tidak menyerang
     }
 
     public void Update()
     {
         if (enemy.playerTarget == null) return;
 
+        enemy.GetAgent().isStopped = false;
         enemy.GetAgent().SetDestination(enemy.playerTarget.position);
 
         if (enemy.IsNearPlayer())
@@ -32,8 +32,6 @@ public class ChaseState : IEnemyState
     public void Exit()
     {
         Debug.Log("Exit Chase");
-
-        //  Matikan animasi jalan
         enemy.SetWalkingAnimation(false);
     }
 }
