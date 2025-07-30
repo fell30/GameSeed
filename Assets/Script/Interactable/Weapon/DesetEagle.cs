@@ -82,6 +82,7 @@ public class Pistol : MonoBehaviour
 
             EnemyHealth enemyHealth = hit.transform.GetComponent<EnemyHealth>();
             TowerHealth towerHealth = hit.transform.GetComponent<TowerHealth>();
+            ZombieEnemy zombieEnemy = hit.transform.GetComponent<ZombieEnemy>();
 
             if (enemyHealth != null)
             {
@@ -94,6 +95,10 @@ public class Pistol : MonoBehaviour
             if (hit.rigidbody != null)
             {
                 hit.rigidbody.AddForce(-hit.normal * force);
+            }
+            if (zombieEnemy != null)
+            {
+                zombieEnemy.TakeDamage(damage);
             }
 
             GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
