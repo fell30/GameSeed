@@ -44,6 +44,14 @@ public class PlayerHealth : MonoBehaviour
 
             }
         }
+        if (Input.GetKeyDown(KeyCode.H)) // For testing purposes
+        {
+            TakeDamage(10f);
+        }
+        if (Input.GetKeyDown(KeyCode.J)) // For testing purposes
+        {
+            RestoreHealth(10f);
+        }
 
     }
 
