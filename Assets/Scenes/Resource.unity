@@ -975,6 +975,11 @@ PrefabInstance:
       propertyPath: InitialModule.startSize.scalar
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 1775385471018581634, guid: 6463cb20471bea94493fc7702a304b1d,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6108759640668964894, guid: 6463cb20471bea94493fc7702a304b1d,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
@@ -988,17 +993,17 @@ PrefabInstance:
     - target: {fileID: 6108759640668964894, guid: 6463cb20471bea94493fc7702a304b1d,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.1353189
+      value: 0.18741103
       objectReference: {fileID: 0}
     - target: {fileID: 6108759640668964894, guid: 6463cb20471bea94493fc7702a304b1d,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.1353189
+      value: 0.64779866
       objectReference: {fileID: 0}
     - target: {fileID: 6108759640668964894, guid: 6463cb20471bea94493fc7702a304b1d,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.13836467
+      value: 0.046853308
       objectReference: {fileID: 0}
     - target: {fileID: 7546374103843062514, guid: 6463cb20471bea94493fc7702a304b1d,
         type: 3}
