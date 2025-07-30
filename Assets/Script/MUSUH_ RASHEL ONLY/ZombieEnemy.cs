@@ -8,6 +8,9 @@ public class ZombieEnemy : MonoBehaviour
     public float attackDamage = 10f;
     public float attackInterval = 1.5f;
 
+    [Header("VFX setting")]
+    [SerializeField] private GameObject hitEffect;
+
     [Header("References")]
     public Animator animator;
     public NavMeshAgent agent;
@@ -71,6 +74,10 @@ public class ZombieEnemy : MonoBehaviour
 
         currentHealth -= damage;
         animator.SetTrigger("isHit");
+        if (hitEffect != null)
+        {
+            Instantiate(hitEffect, transform.position, Quaternion.identity);
+        }
 
         if (currentHealth <= 0f)
         {
