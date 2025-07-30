@@ -20,24 +20,30 @@ public class ZombieEnemy : MonoBehaviour
     public EnemyHealthBar healthBar;
     [Header("Effects")]
     public GameObject explosionEffect;
+    public Transform explosionPoint;
 
 
     private float currentHealth;
     private bool isDead = false;
     private float attackTimer;
+    private bool isInitialized = false;
 
     void Start()
     {
+        if (targetTower != null)
+        {
+            Initialize();
+        }
         currentHealth = maxHealth;
-        agent.SetDestination(targetTower.position);
-        healthBar.SetHealth(currentHealth, maxHealth);
+        // agent.SetDestination(targetTower.position);
+        // healthBar.SetHealth(currentHealth, maxHealth);
 
 
     }
 
     void Update()
     {
-        if (isDead) return;
+        if (isDead || !isInitialized) return;
 
         float distance = Vector3.Distance(transform.position, targetTower.position);
 
@@ -57,6 +63,7 @@ public class ZombieEnemy : MonoBehaviour
         agent.SetDestination(targetTower.position);
         animator.SetBool("isWalking", true);
         animator.SetBool("isAttacking", false);
+
     }
 
     void AttackTower()
@@ -75,6 +82,21 @@ public class ZombieEnemy : MonoBehaviour
             }
 
         }
+    }
+
+    public void SetTargetTower(Transform tower)
+    {
+        targetTower = tower;
+        isInitialized = true;
+    }
+
+    private void Initialize()
+    {
+        if (isInitialized) return;
+
+        agent.SetDestination(targetTower.position);
+        healthBar.SetHealth(currentHealth, maxHealth);
+        isInitialized = true;
     }
 
     public void TakeDamage(float damage)
@@ -112,11 +134,12 @@ public class ZombieEnemy : MonoBehaviour
     }
     private IEnumerator deathSequenece()
     {
-        Destroy(gameObject, 2f);
-        yield return new WaitForSeconds(1f);
+
+        yield return new WaitForSeconds(3f);
         if (explosionEffect != null)
         {
-            GameObject explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+            GameObject explosion = Instantiate(explosionEffect, explosionPoint.position, Quaternion.identity);
             Destroy(explosion, 1f);
 
         }

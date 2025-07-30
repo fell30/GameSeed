@@ -13,7 +13,11 @@ public class Bullet : MonoBehaviour
         if (col.CompareTag("Enemy"))
         {
 
-
+            ZombieEnemy enemy = col.GetComponent<ZombieEnemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+            }
             if (ImpactEffect != null)
             {
                 GameObject impact = Instantiate(ImpactEffect, transform.position, Quaternion.identity);

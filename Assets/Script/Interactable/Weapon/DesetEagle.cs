@@ -85,6 +85,7 @@ public class Pistol : MonoBehaviour
 
             TowerHealth towerHealth = hit.transform.GetComponent<TowerHealth>();
             ZombieEnemy zombieEnemy = hit.transform.GetComponent<ZombieEnemy>();
+            ZombieFast zombieFast = hit.transform.GetComponent<ZombieFast>();
 
 
             if (towerHealth != null)
@@ -98,6 +99,10 @@ public class Pistol : MonoBehaviour
             if (zombieEnemy != null)
             {
                 zombieEnemy.TakeDamage(damage);
+            }
+            if (zombieFast != null)
+            {
+                zombieFast.TakeDamage(damage);
             }
 
             if (hit.transform.CompareTag("Enemy"))
