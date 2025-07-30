@@ -23,7 +23,9 @@ public class Pistol : MonoBehaviour
     [Header("References")]
     public Camera fpsCam;
     public ParticleSystem muzzleFlash;
-    public GameObject impactEffect;
+    public GameObject hitEnemyEffect;
+    public GameObject hitGroundEffect;
+
     public StressReceiver stressReceiver;
     public AudioClip shootSound;
     public AudioClip reloadSound;
@@ -101,8 +103,19 @@ public class Pistol : MonoBehaviour
                 zombieEnemy.TakeDamage(damage);
             }
 
-            GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(impactGO, 2f);
+            if (hit.transform.CompareTag("Enemy"))
+            {
+                // Instantiate impact effect
+                GameObject impactGO = Instantiate(hitEnemyEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impactGO, 2f);
+            }
+            else
+            {
+                // Instantiate ground impact effect
+                GameObject impactGO = Instantiate(hitGroundEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impactGO, 2f);
+            }
+
         }
     }
 

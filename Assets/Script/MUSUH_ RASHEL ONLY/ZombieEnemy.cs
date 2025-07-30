@@ -8,8 +8,7 @@ public class ZombieEnemy : MonoBehaviour
     public float attackDamage = 10f;
     public float attackInterval = 1.5f;
 
-    [Header("VFX setting")]
-    [SerializeField] private GameObject hitEffect;
+
 
     [Header("References")]
     public Animator animator;
@@ -74,10 +73,9 @@ public class ZombieEnemy : MonoBehaviour
 
         currentHealth -= damage;
         animator.SetTrigger("isHit");
-        if (hitEffect != null)
-        {
-            Instantiate(hitEffect, transform.position, Quaternion.identity);
-        }
+        agent.isStopped = true;
+
+
 
         if (currentHealth <= 0f)
         {
@@ -85,10 +83,15 @@ public class ZombieEnemy : MonoBehaviour
         }
     }
 
+
+
     void Die()
     {
         isDead = true;
         agent.isStopped = true;
+
+        agent.enabled = false; // wajib
+
         animator.SetTrigger("isDead");
         Destroy(gameObject, 3f);
     }
