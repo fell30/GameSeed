@@ -39,6 +39,11 @@ public class spawnZombie : MonoBehaviour
 
     [Header("Audio")]
     public AudioSource waveAudio;
+    [Header("Wave Warning System")]
+    public GameObject warningPanel; // Panel container untuk warning
+    public Image warningImage; // Warning icon/image
+    public TextMeshProUGUI warningText; // Text "INCOMING WAVE" etc
+    public float warningDuration = 3f; // Durasi warning muncul
 
     private int currentWaveIndex = 0;
     private bool isSpawning = false;
@@ -49,6 +54,9 @@ public class spawnZombie : MonoBehaviour
 
     private void Awake()
     {
+        // Hide warning panel at start
+        if (warningPanel != null)
+            warningPanel.SetActive(false);
         if (targetTower == null)
             targetTower = GameObject.FindWithTag("PlayerBase")?.transform;
 
@@ -89,6 +97,10 @@ public class spawnZombie : MonoBehaviour
         while (currentWaveIndex < waves.Length)
         {
             Debug.Log($"[WaveSpawner] Starting wave {currentWaveIndex + 1}");
+            if (currentWaveIndex > 0)
+            {
+                yield return StartCoroutine(ShowWaveWarning());
+            }
 
             if (currentWaveIndex == waves.Length - 1)
             {
@@ -120,6 +132,39 @@ public class spawnZombie : MonoBehaviour
         // Set progress bar to 100% when all waves complete
         if (waveProgressBar != null)
             waveProgressBar.fillAmount = 1f;
+    }
+
+    private IEnumerator ShowWaveWarning()
+    {
+        if (warningPanel == null) yield break;
+
+        // Determine warning message based on wave
+        string warningMessage = "";
+        if (currentWaveIndex == waves.Length - 1)
+        {
+            warningMessage = "FINAL WAVE INCOMING!";
+        }
+        else
+        {
+            warningMessage = $"WAVE {currentWaveIndex + 1} INCOMING!";
+        }
+
+        // Set warning text
+        if (warningText != null)
+            warningText.text = warningMessage;
+
+        // Show warning panel
+        warningPanel.SetActive(true);
+
+
+
+        // Keep warning visible for specified duration
+        yield return new WaitForSeconds(warningDuration);
+
+        // Hide warning panel
+        warningPanel.SetActive(false);
+
+        Debug.Log($"<color=yellow>[WaveSpawner] {warningMessage}</color>");
     }
 
     private IEnumerator SpawnCurrentWave()

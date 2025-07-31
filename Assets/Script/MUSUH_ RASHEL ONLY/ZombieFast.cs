@@ -173,7 +173,7 @@ public class ZombieFast : MonoBehaviour
 
         currentHealth -= damage;
         animator.SetTrigger("isHit");
-        StartCoroutine(TemporaryStop(10f));
+        StartCoroutine(TemporaryStop(0.5f));
         PlaySound(hitClip);
 
         if (healthBar != null)

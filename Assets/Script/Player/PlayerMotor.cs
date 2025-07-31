@@ -13,6 +13,7 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] private float speed = 5f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float jumpHeight = 3f;
+    [SerializeField] private Animator animator;
 
     // Audio
     // [SerializeField] private AudioClip walkSound;
@@ -53,6 +54,7 @@ public class PlayerMotor : MonoBehaviour
 
         // Handle audio playback
         HandleAudio();
+        animator.SetFloat("Speed", currentInput.magnitude);
     }
 
     private void HandleInput()

@@ -22,6 +22,7 @@ public class Pistol : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public GameObject hitEnemyEffect;
     public GameObject hitGroundEffect;
+    public Animator animator;
 
     public StressReceiver stressReceiver;
 
@@ -61,6 +62,7 @@ public class Pistol : MonoBehaviour
     {
         currentClipAmmo--;
         UpdateAmmoUI();
+        animator.SetTrigger("Shoot");
 
         if (muzzleFlash != null)
             muzzleFlash.Play();
@@ -100,6 +102,7 @@ public class Pistol : MonoBehaviour
             Destroy(impactGO, 2f);
         }
     }
+
 
     IEnumerator Reload()
     {
