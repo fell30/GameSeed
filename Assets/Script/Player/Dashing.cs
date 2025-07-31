@@ -14,6 +14,8 @@ public class DashingController : MonoBehaviour
     public float dashSpeed = 20f;
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
+    public AudioSource audioSource;
+    public AudioClip dashSound;
 
     [Header("FOV Effect")]
     public float dashFov = 100f;
@@ -48,6 +50,10 @@ public class DashingController : MonoBehaviour
         {
             dashDirection = GetDashDirection();
             StartCoroutine(PerformDash());
+            if (audioSource != null && dashSound != null)
+            {
+                audioSource.PlayOneShot(dashSound);
+            }
         }
     }
 
@@ -74,6 +80,7 @@ public class DashingController : MonoBehaviour
     {
         isDashing = true;
         dashCooldownTimer = dashCooldown;
+
 
         if (playerLook != null)
             playerLook.SetFov(dashFov);

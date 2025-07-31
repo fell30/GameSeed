@@ -6,7 +6,8 @@ public class PlayerMotor : MonoBehaviour
 {
     // Components
     private CharacterController controller;
-    private AudioSource audioSource;
+    public AudioSource audioSource;
+    public AudioClip walkSound;
 
     // Movement variables
     [SerializeField] private float speed = 5f;
@@ -24,7 +25,7 @@ public class PlayerMotor : MonoBehaviour
     {
         // Initialize components
         controller = GetComponent<CharacterController>();
-        audioSource = GetComponent<AudioSource>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -100,7 +101,12 @@ public class PlayerMotor : MonoBehaviour
         {
             if (isGrounded && currentInput.magnitude > 0.1f)
             {
-                // Play walking sound here if needed
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.clip = walkSound;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                }
             }
             else if (audioSource.isPlaying)
             {

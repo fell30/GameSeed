@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
 
@@ -27,15 +24,17 @@ public class Pistol : MonoBehaviour
     public GameObject hitGroundEffect;
 
     public StressReceiver stressReceiver;
+
+    [Header("Audio")]
     public AudioClip shootSound;
     public AudioClip reloadSound;
+    public AudioSource audioSource;
 
     [Header("UI")]
     public TextMeshProUGUI ammoText;
 
     void Start()
     {
-        // Initialize ammo
         currentClipAmmo = maxClipSize;
         currentTotalAmmo = maxAmmo;
         UpdateAmmoUI();
@@ -43,81 +42,62 @@ public class Pistol : MonoBehaviour
 
     void Update()
     {
-        // Shoot
         if (Input.GetButtonDown("Fire1") && !isReloading)
         {
             if (currentClipAmmo > 0)
-            {
                 Shoot();
-            }
             else
-            {
-                // Click sound atau empty gun sound bisa ditambah di sini
                 Debug.Log("No ammo! Press R to reload");
-            }
         }
 
-        // Reload
         if (Input.GetKeyDown(KeyCode.R) && !isReloading)
         {
             if (currentClipAmmo < maxClipSize && currentTotalAmmo > 0)
-            {
                 StartCoroutine(Reload());
-            }
         }
     }
 
     void Shoot()
     {
-        // Kurangi ammo
         currentClipAmmo--;
         UpdateAmmoUI();
 
-        muzzleFlash.Play();
-        stressReceiver.InduceStress(0.15f);
-        AudioSource.PlayClipAtPoint(shootSound, Camera.main.transform.position);
+        if (muzzleFlash != null)
+            muzzleFlash.Play();
+
+        if (stressReceiver != null)
+            stressReceiver.InduceStress(0.15f);
+
+        if (shootSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(shootSound);
+        }
 
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
-            Debug.Log(hit.transform.name);
-
-
             TowerHealth towerHealth = hit.transform.GetComponent<TowerHealth>();
             ZombieEnemy zombieEnemy = hit.transform.GetComponent<ZombieEnemy>();
             ZombieFast zombieFast = hit.transform.GetComponent<ZombieFast>();
 
-
             if (towerHealth != null)
-            {
                 towerHealth.TakeDamage(damage);
-            }
+
             if (hit.rigidbody != null)
-            {
                 hit.rigidbody.AddForce(-hit.normal * force);
-            }
+
             if (zombieEnemy != null)
-            {
                 zombieEnemy.TakeDamage(damage);
-            }
+
             if (zombieFast != null)
-            {
                 zombieFast.TakeDamage(damage);
-            }
 
-            if (hit.transform.CompareTag("Enemy"))
-            {
-                // Instantiate impact effect
-                GameObject impactGO = Instantiate(hitEnemyEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(impactGO, 2f);
-            }
-            else
-            {
-                // Instantiate ground impact effect
-                GameObject impactGO = Instantiate(hitGroundEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(impactGO, 2f);
-            }
-
+            GameObject impactGO = Instantiate(
+                hit.transform.CompareTag("Enemy") ? hitEnemyEffect : hitGroundEffect,
+                hit.point,
+                Quaternion.LookRotation(hit.normal)
+            );
+            Destroy(impactGO, 2f);
         }
     }
 
@@ -126,13 +106,11 @@ public class Pistol : MonoBehaviour
         isReloading = true;
         Debug.Log("Reloading...");
 
-        // Play reload sound
-        if (reloadSound != null)
+        if (reloadSound != null && audioSource != null)
         {
-            AudioSource.PlayClipAtPoint(reloadSound, transform.position);
+            audioSource.PlayOneShot(reloadSound);
         }
 
-        // Update UI to show reloading
         if (ammoText != null)
         {
             ammoText.text = "RELOADING...";
@@ -140,18 +118,14 @@ public class Pistol : MonoBehaviour
 
         yield return new WaitForSeconds(reloadTime);
 
-        // Calculate how much ammo to reload
         int ammoNeeded = maxClipSize - currentClipAmmo;
         int ammoToReload = Mathf.Min(ammoNeeded, currentTotalAmmo);
 
-        // Reload
         currentClipAmmo += ammoToReload;
         currentTotalAmmo -= ammoToReload;
 
         isReloading = false;
         UpdateAmmoUI();
-
-        Debug.Log("Reload complete!");
     }
 
     void UpdateAmmoUI()
@@ -162,33 +136,15 @@ public class Pistol : MonoBehaviour
         }
     }
 
-    // Fungsi untuk menambah ammo (bisa dipanggil dari pickup script)
     public void AddAmmo(int amount)
     {
         currentTotalAmmo += amount;
-        currentTotalAmmo = Mathf.Min(currentTotalAmmo, maxAmmo); // Cap at maximum
+        currentTotalAmmo = Mathf.Min(currentTotalAmmo, maxAmmo);
         UpdateAmmoUI();
-        Debug.Log($"Added {amount} ammo. Total: {currentTotalAmmo}");
     }
 
-    // Getter functions (kalau butuh dari script lain)
-    public int GetCurrentClipAmmo()
-    {
-        return currentClipAmmo;
-    }
-
-    public int GetCurrentTotalAmmo()
-    {
-        return currentTotalAmmo;
-    }
-
-    public bool IsReloading()
-    {
-        return isReloading;
-    }
-
-    public bool CanShoot()
-    {
-        return currentClipAmmo > 0 && !isReloading;
-    }
+    public int GetCurrentClipAmmo() => currentClipAmmo;
+    public int GetCurrentTotalAmmo() => currentTotalAmmo;
+    public bool IsReloading() => isReloading;
+    public bool CanShoot() => currentClipAmmo > 0 && !isReloading;
 }
