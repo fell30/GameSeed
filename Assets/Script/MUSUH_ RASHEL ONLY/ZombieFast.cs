@@ -160,14 +160,21 @@ public class ZombieFast : MonoBehaviour
         isInitialized = true;
     }
 
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+            audioSource.PlayOneShot(clip);
+    }
+
     public void TakeDamage(float damage)
     {
         if (isDead) return;
 
         currentHealth -= damage;
         animator.SetTrigger("isHit");
-        agent.isStopped = true;
-        AudioSource.PlayClipAtPoint(hitClip, transform.position);
+        StartCoroutine(TemporaryStop(10f));
+        PlaySound(hitClip);
 
         if (healthBar != null)
             healthBar.SetHealth(currentHealth, maxHealth);
@@ -177,6 +184,17 @@ public class ZombieFast : MonoBehaviour
             Die();
         }
     }
+    private IEnumerator TemporaryStop(float duration)
+    {
+        if (agent.enabled)
+        {
+            agent.isStopped = true;
+            yield return new WaitForSeconds(duration);
+            if (!isDead)
+                agent.isStopped = false;
+        }
+    }
+
 
     void Die()
     {
@@ -186,7 +204,8 @@ public class ZombieFast : MonoBehaviour
 
         animator.SetTrigger("isDead");
         StartCoroutine(deathSequence());
-        AudioSource.PlayClipAtPoint(deathClip, transform.position);
+        PlaySound(deathClip);
+
     }
 
     private IEnumerator deathSequence()
