@@ -75,7 +75,7 @@ public class Pistol : MonoBehaviour
 
         muzzleFlash.Play();
         stressReceiver.InduceStress(0.15f);
-        AudioSource.PlayClipAtPoint(shootSound, transform.position);
+        AudioSource.PlayClipAtPoint(shootSound, Camera.main.transform.position);
 
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))

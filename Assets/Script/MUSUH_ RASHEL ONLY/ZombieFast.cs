@@ -17,6 +17,10 @@ public class ZombieFast : MonoBehaviour
     public NavMeshAgent agent;
     public Transform targetTower;
     public Transform player;
+    public AudioSource audioSource;
+    public AudioClip attackClip;
+    public AudioClip hitClip;
+    public AudioClip deathClip;
 
     [Header("Health Bar")]
     public EnemyHealthBar healthBar;
@@ -121,7 +125,11 @@ public class ZombieFast : MonoBehaviour
         agent.isStopped = true;
         animator.SetBool("isRunning", false);
         animator.SetBool("isAttacking", true);
-        Debug.Log($"Attacking player at {player.position}");
+        if (audioSource != null && attackClip != null)
+        {
+            audioSource.PlayOneShot(attackClip);
+        }
+
 
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
         attackTimer += Time.deltaTime;
@@ -159,6 +167,7 @@ public class ZombieFast : MonoBehaviour
         currentHealth -= damage;
         animator.SetTrigger("isHit");
         agent.isStopped = true;
+        AudioSource.PlayClipAtPoint(hitClip, transform.position);
 
         if (healthBar != null)
             healthBar.SetHealth(currentHealth, maxHealth);
@@ -177,6 +186,7 @@ public class ZombieFast : MonoBehaviour
 
         animator.SetTrigger("isDead");
         StartCoroutine(deathSequence());
+        AudioSource.PlayClipAtPoint(deathClip, transform.position);
     }
 
     private IEnumerator deathSequence()
