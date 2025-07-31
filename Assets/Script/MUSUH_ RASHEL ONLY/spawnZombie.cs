@@ -31,14 +31,21 @@ public class spawnZombie : MonoBehaviour
     public float timeBetweenWaves = 10f;
 
     [Header("UI Elements")]
-    public Slider waveProgressBar;
+    public Image waveProgressBar; // Changed from Slider to Image
     public TextMeshProUGUI finalWaveText;
+
+    [Header("Progress Type")]
+    [SerializeField] private bool useOverallProgress = true; // Toggle untuk memilih mode
 
     [Header("Audio")]
     public AudioSource waveAudio;
 
     private int currentWaveIndex = 0;
     private bool isSpawning = false;
+
+    // Variables untuk overall progress
+    private int totalEnemiesAllWaves = 0;
+    private int spawnedEnemiesAllWaves = 0;
 
     private void Awake()
     {
@@ -47,10 +54,33 @@ public class spawnZombie : MonoBehaviour
 
         if (finalWaveText != null)
             finalWaveText.gameObject.SetActive(false);
+
+        // Hitung total enemies dari semua wave
+        CalculateTotalEnemies();
+    }
+
+    private void CalculateTotalEnemies()
+    {
+        totalEnemiesAllWaves = 0;
+        foreach (Wave wave in waves)
+        {
+            foreach (WaveSettings ws in wave.WaveSettings)
+            {
+                totalEnemiesAllWaves += ws.EnemyCount;
+            }
+        }
+        Debug.Log($"[WaveSpawner] Total enemies across all waves: {totalEnemiesAllWaves}");
     }
 
     private void Start()
     {
+        // Initialize progress bar
+        if (waveProgressBar != null)
+        {
+            waveProgressBar.fillAmount = 0f;
+            waveProgressBar.type = Image.Type.Filled; // Ensure it's set to Filled
+        }
+
         StartCoroutine(HandleWaveFlow());
     }
 
@@ -86,6 +116,10 @@ public class spawnZombie : MonoBehaviour
         }
 
         Debug.Log("<color=green>[WaveSpawner] All waves complete!</color>");
+
+        // Set progress bar to 100% when all waves complete
+        if (waveProgressBar != null)
+            waveProgressBar.fillAmount = 1f;
     }
 
     private IEnumerator SpawnCurrentWave()
@@ -108,14 +142,18 @@ public class spawnZombie : MonoBehaviour
             pending.Add(clone);
         }
 
-        // Total and spawn tracking for progress bar
-        int totalEnemies = 0;
-        foreach (var ws in pending)
-            totalEnemies += ws.EnemyCount;
+        // Setup progress tracking based on mode
+        int totalEnemiesThisWave = 0;
+        int spawnedEnemiesThisWave = 0;
 
-        int spawnedEnemies = 0;
-        if (waveProgressBar != null)
-            waveProgressBar.value = 0f;
+        if (!useOverallProgress)
+        {
+            foreach (var ws in pending)
+                totalEnemiesThisWave += ws.EnemyCount;
+
+            if (waveProgressBar != null)
+                waveProgressBar.fillAmount = 0f; // Reset for individual wave
+        }
 
         while (pending.Count > 0)
         {
@@ -138,11 +176,25 @@ public class spawnZombie : MonoBehaviour
                     if (zombieFast != null) zombieFast.SetTargetTower(targetTower);
 
                     ws.EnemyCount--;
-                    spawnedEnemies++;
 
-                    // Update progress bar
-                    if (waveProgressBar != null && totalEnemies > 0)
-                        waveProgressBar.value = (float)spawnedEnemies / totalEnemies;
+                    // Update counters
+                    spawnedEnemiesThisWave++;
+                    spawnedEnemiesAllWaves++;
+
+                    // Update progress bar based on selected mode
+                    if (waveProgressBar != null)
+                    {
+                        if (useOverallProgress && totalEnemiesAllWaves > 0)
+                        {
+                            // Overall progress across all waves
+                            waveProgressBar.fillAmount = (float)spawnedEnemiesAllWaves / totalEnemiesAllWaves;
+                        }
+                        else if (!useOverallProgress && totalEnemiesThisWave > 0)
+                        {
+                            // Individual wave progress (original behavior)
+                            waveProgressBar.fillAmount = (float)spawnedEnemiesThisWave / totalEnemiesThisWave;
+                        }
+                    }
 
                     yield return new WaitForSeconds(ws.SpawnDelay);
                 }
@@ -162,5 +214,32 @@ public class spawnZombie : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    // Method untuk mengubah mode progress secara runtime
+    public void SetOverallProgressMode(bool enabled)
+    {
+        useOverallProgress = enabled;
+
+        if (waveProgressBar != null)
+        {
+            if (useOverallProgress && totalEnemiesAllWaves > 0)
+            {
+                waveProgressBar.fillAmount = (float)spawnedEnemiesAllWaves / totalEnemiesAllWaves;
+            }
+            else
+            {
+                // Reset untuk mode individual wave
+                waveProgressBar.fillAmount = 0f;
+            }
+        }
+    }
+
+    // Method untuk debug info
+    public void GetProgressInfo()
+    {
+        Debug.Log($"Current Wave: {currentWaveIndex + 1}/{waves.Length}");
+        Debug.Log($"Spawned This Session: {spawnedEnemiesAllWaves}/{totalEnemiesAllWaves}");
+        Debug.Log($"Overall Progress: {((float)spawnedEnemiesAllWaves / totalEnemiesAllWaves * 100f):F1}%");
     }
 }
