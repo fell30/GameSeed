@@ -13,19 +13,11 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float jumpHeight = 3f;
 
-    // Dash variables
-    [SerializeField] private float dashSpeed = 10f;
-    [SerializeField] private float dashDuration = 0.2f;
-    [SerializeField] private float dashCooldown = 1f;
-
     // Audio
-    //  [SerializeField] private AudioClip walkSound;
+    // [SerializeField] private AudioClip walkSound;
 
     private Vector3 playerVelocity;
     private Vector2 currentInput;
-    private bool isDashing = false;
-    private float dashTime;
-    private float lastDash;
     private bool isGrounded;
 
     void Start()
@@ -45,7 +37,6 @@ public class PlayerMotor : MonoBehaviour
         {
             Debug.LogError("AudioSource not found on Player!");
         }
-
     }
 
     void Update()
@@ -58,9 +49,6 @@ public class PlayerMotor : MonoBehaviour
 
         // Process movement
         ProcessMove(currentInput);
-
-        // Process dash
-        ProcessDash();
 
         // Handle audio playback
         HandleAudio();
@@ -97,27 +85,6 @@ public class PlayerMotor : MonoBehaviour
         controller.Move(playerVelocity * Time.deltaTime);
     }
 
-    private void ProcessDash()
-    {
-        // Initiate dash with Left Shift
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && Time.time - lastDash >= dashCooldown)
-        {
-            isDashing = true;
-            dashTime = Time.time;
-            lastDash = Time.time;
-        }
-
-        // Process dash movement
-        if (isDashing)
-        {
-            controller.Move(transform.forward * dashSpeed * Time.deltaTime);
-            if (Time.time - dashTime >= dashDuration)
-            {
-                isDashing = false;
-            }
-        }
-    }
-
     private void Jump()
     {
         if (isGrounded)
@@ -131,9 +98,9 @@ public class PlayerMotor : MonoBehaviour
         // Handle audio during gameplay
         if (Time.timeScale > 0)
         {
-            if (isGrounded && currentInput.magnitude > 0.1f && !isDashing)
+            if (isGrounded && currentInput.magnitude > 0.1f)
             {
-
+                // Play walking sound here if needed
             }
             else if (audioSource.isPlaying)
             {
