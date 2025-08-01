@@ -34,6 +34,7 @@ public class Pistol : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI ammoText;
 
+
     void Start()
     {
         currentClipAmmo = maxClipSize;
@@ -63,6 +64,7 @@ public class Pistol : MonoBehaviour
         currentClipAmmo--;
         UpdateAmmoUI();
         animator.SetTrigger("Shoot");
+
 
         if (muzzleFlash != null)
             muzzleFlash.Play();
