@@ -156,11 +156,11 @@ public class ZombieEnemy : MonoBehaviour
         {
             Vector3 damagePosition = transform.position + Vector3.up * 2f;
 
-            // Tentukan damage type berdasarkan damage amount
+
             DamageType damageType = DamageType.Normal;
-            if (damage >= attackDamage * 1.8f) // Damage tinggi = headshot
+            if (damage >= attackDamage * 1.8f)
                 damageType = DamageType.Headshot;
-            else if (damage >= attackDamage * 1.3f) // Medium = critical
+            else if (damage >= attackDamage * 1.3f)
                 damageType = DamageType.Critical;
 
             DamageTextManager.Instance.ShowDamageText(damagePosition, damage, damageType);

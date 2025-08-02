@@ -4713,6 +4713,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: defenseCanoon (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2771452414580257265, guid: c9052296ff5af48498ae64aa773bbb32,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5246574398201447429, guid: c9052296ff5af48498ae64aa773bbb32,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -5376,6 +5381,7 @@ MonoBehaviour:
   timeBetweenWaves: 10
   waveProgressBar: {fileID: 791211725}
   finalWaveText: {fileID: 313890864}
+  uI_Manager: {fileID: 850661055}
   useOverallProgress: 1
   waveAudio: {fileID: 915639879}
   warningClip: {fileID: 8300000, guid: bc1af191147a33d4e86801f6748dc77f, type: 3}
@@ -7322,6 +7328,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: defenseCanoon
+      objectReference: {fileID: 0}
+    - target: {fileID: 2771452414580257265, guid: c9052296ff5af48498ae64aa773bbb32,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5246574398201447429, guid: c9052296ff5af48498ae64aa773bbb32,
         type: 3}
@@ -11149,6 +11160,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: defenseCanoon (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2771452414580257265, guid: c9052296ff5af48498ae64aa773bbb32,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5246574398201447429, guid: c9052296ff5af48498ae64aa773bbb32,
         type: 3}

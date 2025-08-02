@@ -33,6 +33,7 @@ public class spawnZombie : MonoBehaviour
     [Header("UI Elements")]
     public Image waveProgressBar; // Changed from Slider to Image
     public TextMeshProUGUI finalWaveText;
+    public UI_Manager uI_Manager;
 
     [Header("Progress Type")]
     [SerializeField] private bool useOverallProgress = true; // Toggle untuk memilih mode
@@ -129,6 +130,7 @@ public class spawnZombie : MonoBehaviour
         }
 
         Debug.Log("<color=green>[WaveSpawner] All waves complete!</color>");
+        uI_Manager.ShowWinGamePanel();
 
         // Set progress bar to 100% when all waves complete
         if (waveProgressBar != null)
