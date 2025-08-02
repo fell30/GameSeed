@@ -34,7 +34,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.12, z: -2.698}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5834734927006325378}
   - {fileID: 6099760258951769823}
@@ -10905,8 +10905,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 889639913402075527, guid: d59cbe3a99069464fb1ab30f74486c2c,
         type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 128.1361
+      objectReference: {fileID: 0}
+    - target: {fileID: 889639913402075527, guid: d59cbe3a99069464fb1ab30f74486c2c,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 36.271
+      objectReference: {fileID: 0}
+    - target: {fileID: 889639913402075527, guid: d59cbe3a99069464fb1ab30f74486c2c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -959.78546
+      objectReference: {fileID: 0}
+    - target: {fileID: 889639913402075527, guid: d59cbe3a99069464fb1ab30f74486c2c,
+        type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -538.0295
+      value: -537.86676
       objectReference: {fileID: 0}
     - target: {fileID: 1105415532191174840, guid: d59cbe3a99069464fb1ab30f74486c2c,
         type: 3}
@@ -11022,6 +11037,28 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7547509730749134976, guid: d59cbe3a99069464fb1ab30f74486c2c,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: fe2ef0996a45a854f9488b922766c6bd,
+        type: 2}
+    - target: {fileID: 7547509730749134976, guid: d59cbe3a99069464fb1ab30f74486c2c,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5282420803423437259, guid: fe2ef0996a45a854f9488b922766c6bd,
+        type: 2}
+    - target: {fileID: 7547509730749134976, guid: d59cbe3a99069464fb1ab30f74486c2c,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7610865556279882720, guid: d59cbe3a99069464fb1ab30f74486c2c,
+        type: 3}
+      propertyPath: m_Value
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

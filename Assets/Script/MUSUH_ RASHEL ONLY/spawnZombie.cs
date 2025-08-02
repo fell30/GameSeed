@@ -39,6 +39,7 @@ public class spawnZombie : MonoBehaviour
 
     [Header("Audio")]
     public AudioSource waveAudio;
+    public AudioClip warningClip;
     [Header("Wave Warning System")]
     public GameObject warningPanel; // Panel container untuk warning
     public Image warningImage; // Warning icon/image
@@ -155,14 +156,19 @@ public class spawnZombie : MonoBehaviour
 
         // Show warning panel
         warningPanel.SetActive(true);
-
-
+        if (warningClip != null && waveAudio != null)
+        {
+            waveAudio.clip = warningClip;
+            waveAudio.loop = true;
+            waveAudio.Play();
+        }
 
         // Keep warning visible for specified duration
         yield return new WaitForSeconds(warningDuration);
 
         // Hide warning panel
         warningPanel.SetActive(false);
+        waveAudio.Stop();
 
         Debug.Log($"<color=yellow>[WaveSpawner] {warningMessage}</color>");
     }

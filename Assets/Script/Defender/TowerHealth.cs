@@ -5,7 +5,7 @@ public class TowerHealth : MonoBehaviour
 {
     [Header("Health Settings")]
     public float maxHealth = 100f;
-    private float currentHealth;
+    public float currentHealth;
 
     [Header("UI Elements")]
     public Slider healthSlider;
@@ -76,6 +76,7 @@ public class TowerHealth : MonoBehaviour
         // - Spawn explosion effect
         // - Update game state
         // - Show game over screen
+        Destroy(gameObject);
 
         // Sementara ini cuma log
         Debug.Log("Add your zero health logic here!");

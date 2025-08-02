@@ -8,6 +8,8 @@ public class Pistol : MonoBehaviour
     public float damage;
     public float range = 100f;
     public float force = 10f;
+    public float fireRate;
+    private float nextTimeToFire = 0f;
 
     [Header("Ammo Settings")]
     public int maxClipSize = 12;
@@ -47,9 +49,10 @@ public class Pistol : MonoBehaviour
         if (Input.GetButtonDown("Fire1") && !isReloading)
         {
             if (currentClipAmmo > 0)
-                Shoot();
-            else
-                Debug.Log("No ammo! Press R to reload");
+                if (CanShootWithFireRate())
+                    Shoot();
+                else
+                    Debug.Log("No ammo! Press R to reload");
         }
 
         if (Input.GetKeyDown(KeyCode.R) && !isReloading)
@@ -58,9 +61,14 @@ public class Pistol : MonoBehaviour
                 StartCoroutine(Reload());
         }
     }
+    public bool CanShootWithFireRate()
+    {
+        return currentClipAmmo > 0 && !isReloading && Time.time >= nextTimeToFire;
+    }
 
     void Shoot()
     {
+        nextTimeToFire = Time.time + fireRate;
         currentClipAmmo--;
         UpdateAmmoUI();
         animator.SetTrigger("Shoot");
@@ -80,24 +88,60 @@ public class Pistol : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
-            TowerHealth towerHealth = hit.transform.GetComponent<TowerHealth>();
+            float finalDamage = damage; // damage dasar
+
+
+            // CEK APAKAH KENA KEPALA
+            if (hit.collider.CompareTag("Head"))
+            {
+                finalDamage = damage * 3f; // HEADSHOT 3x damage
+
+                Debug.Log("HEADSHOT! Damage: " + finalDamage);
+            }
+            else if (hit.collider.CompareTag("Enemy"))
+            {
+                finalDamage = damage * 0.7f; // LIMBS reduced damage
+
+                Debug.Log("Limb shot! Damage: " + finalDamage);
+            }
+            else
+            {
+                // RANDOM CRITICAL (5% chance)
+                if (Random.Range(0f, 100f) <= 5f)
+                {
+                    finalDamage = damage * 1.5f;
+
+                    Debug.Log("CRITICAL HIT! Damage: " + finalDamage);
+                }
+                else
+                {
+                    Debug.Log("Body shot! Damage: " + finalDamage);
+                }
+            }
+
+            // CARI ZOMBIE DARI HIT OBJECT ATAU PARENT-NYA
             ZombieEnemy zombieEnemy = hit.transform.GetComponent<ZombieEnemy>();
             ZombieFast zombieFast = hit.transform.GetComponent<ZombieFast>();
 
-            if (towerHealth != null)
-                towerHealth.TakeDamage(damage);
+            // KALAU GA ADA DI HIT OBJECT, CARI DI PARENT
+            if (zombieEnemy == null && zombieFast == null)
+            {
+                zombieEnemy = hit.transform.GetComponentInParent<ZombieEnemy>();
+                zombieFast = hit.transform.GetComponentInParent<ZombieFast>();
+            }
 
             if (hit.rigidbody != null)
                 hit.rigidbody.AddForce(-hit.normal * force);
 
+            // APPLY DAMAGE DENGAN TYPE
             if (zombieEnemy != null)
-                zombieEnemy.TakeDamage(damage);
+                zombieEnemy.TakeDamage(finalDamage);
 
             if (zombieFast != null)
-                zombieFast.TakeDamage(damage);
+                zombieFast.TakeDamage(finalDamage);
 
             GameObject impactGO = Instantiate(
-                hit.transform.CompareTag("Enemy") ? hitEnemyEffect : hitGroundEffect,
+                hit.transform.CompareTag("Enemy") || hit.transform.CompareTag("Head") ? hitEnemyEffect : hitGroundEffect,
                 hit.point,
                 Quaternion.LookRotation(hit.normal)
             );
