@@ -175,8 +175,8 @@ MonoBehaviour:
   projectile: {fileID: 2979819025625060468, guid: 280da81bacdd48d40852eae6b28e1ff5,
     type: 3}
   shootPoint: {fileID: 5233130118529802197}
-  force: 1000
-  shootingDelay: 0.56
+  force: 2000
+  shootingDelay: 1
   muzzleFlash: {fileID: 819050912563938807}
   secondProjectile: {fileID: 0}
   secondShootPoint: {fileID: 0}

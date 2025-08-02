@@ -94,7 +94,7 @@ public class Pistol : MonoBehaviour
             // CEK APAKAH KENA KEPALA
             if (hit.collider.CompareTag("Head"))
             {
-                finalDamage = damage * 3f; // HEADSHOT 3x damage
+                finalDamage = damage * 5f; // HEADSHOT 3x damage
 
                 Debug.Log("HEADSHOT! Damage: " + finalDamage);
             }

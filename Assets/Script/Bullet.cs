@@ -13,8 +13,8 @@ public class Bullet : MonoBehaviour
         if (col.CompareTag("Enemy"))
         {
 
-            ZombieEnemy enemy = col.GetComponent<ZombieEnemy>();
-            ZombieFast enemyFast = col.GetComponent<ZombieFast>();
+            ZombieEnemy enemy = col.GetComponentInParent<ZombieEnemy>();
+            ZombieFast enemyFast = col.GetComponentInParent<ZombieFast>();
             if (enemy != null)
             {
                 enemy.TakeDamage(damage);

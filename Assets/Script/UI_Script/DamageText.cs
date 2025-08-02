@@ -48,7 +48,7 @@ public class DamageText : MonoBehaviour
             case DamageType.Headshot:
                 damageText.color = headshotColor;
                 damageText.fontSize = 48f;
-                punchScale = 2f; // Headshot lebih besar
+                punchScale = 2f;
                 break;
             case DamageType.Critical:
                 damageText.color = criticalColor;
@@ -62,7 +62,7 @@ public class DamageText : MonoBehaviour
                 break;
         }
 
-        // Start dengan scale kecil
+
         transform.localScale = Vector3.zero;
         damageText.text = "0";
 
@@ -73,10 +73,10 @@ public class DamageText : MonoBehaviour
     {
         if (playerCamera == null) return;
 
-        // Convert world position to screen position
+
         Vector3 screenPos = playerCamera.WorldToScreenPoint(worldPosition);
 
-        // Check if behind camera
+
         if (screenPos.z < 0)
         {
             Destroy(gameObject);
@@ -125,7 +125,7 @@ public class DamageText : MonoBehaviour
             yield return null;
         }
 
-        // Pastikan nilai final
+        //  nilai final
         transform.localScale = Vector3.one;
         damageText.text = Mathf.RoundToInt(targetDamage).ToString();
 
