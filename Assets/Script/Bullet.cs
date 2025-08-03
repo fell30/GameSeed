@@ -31,5 +31,14 @@ public class Bullet : MonoBehaviour
 
             Destroy(gameObject);
         }
+        else
+        {
+            // Jika bullet mengenai objek lain, misalnya dinding atau tanah, hancurkan bullet
+            if (ImpactEffect != null)
+            {
+                GameObject impact = Instantiate(ImpactEffect, transform.position, Quaternion.identity);
+                Destroy(impact, 2f);
+            }
+        }
     }
 }

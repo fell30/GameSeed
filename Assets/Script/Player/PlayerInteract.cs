@@ -21,21 +21,28 @@ public class PlayerInteract : MonoBehaviour
     void Update()
     {
 
-        playerUI.UpdateText(string.Empty);
+        playerUI.UpdatePrompt(string.Empty, null);
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * Distance);
         RaycastHit hitinfo;
         if (Physics.Raycast(ray, out hitinfo, Distance, Mask))
         {
-            if (hitinfo.collider.GetComponent<Interactable>() != null)
+            Interactable interactable = hitinfo.collider.GetComponent<Interactable>();
+            if (interactable != null)
             {
-                Interactable interactable = hitinfo.collider.GetComponent<Interactable>();
-                playerUI.UpdateText(interactable.PromptMessage);
+                // Kirim prompt kosong, hanya fokus ke ikon
+                playerUI.UpdatePrompt(string.Empty, interactable.PromptIcon);
+
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     interactable.BaseInteract();
                 }
             }
         }
+        else
+        {
+            playerUI.UpdatePrompt(string.Empty, null); // Sembunyikan icon jika tidak ada interaksi
+        }
+
     }
 }

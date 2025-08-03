@@ -8,6 +8,7 @@ public class ZombieEnemy : MonoBehaviour
     public float maxHealth = 100f;
     public float attackDamage = 10f;
     public float attackInterval = 1.5f;
+    public float hitStopDuration = 0.9f;
 
     [Header("References")]
     public Animator animator;
@@ -21,12 +22,18 @@ public class ZombieEnemy : MonoBehaviour
     [Header("Effects")]
     public GameObject explosionEffect;
     public Transform explosionPoint;
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip KillClip;
+    public AudioClip hitClip;
+    public AudioClip deathClip;
 
     private float currentHealth;
     private bool isDead = false;
     private float attackTimer;
     private bool isInitialized = false;
     private bool towerDestroyed = false; // FLAG UNTUK CEK APAKAH TOWER SUDAH HANCUR
+    private bool isStunned = false; // FLAG UNTUK CEK APAKAH ZOMBIE SEDANG STUN DARI HIT
 
     private enum TargetMode { Tower, Base } // ENUM UNTUK MODE TARGET
     private TargetMode currentTarget = TargetMode.Tower;
@@ -50,7 +57,8 @@ public class ZombieEnemy : MonoBehaviour
 
     void Update()
     {
-        if (isDead || !isInitialized) return;
+        if (isDead || !isInitialized || isStunned) return; // TAMBAHKAN CEK isStunned
+
         if (targetTower == null)
         {
             towerDestroyed = true;
@@ -151,11 +159,17 @@ public class ZombieEnemy : MonoBehaviour
 
         currentHealth -= damage;
         animator.SetTrigger("isHit");
-        agent.isStopped = true;
+        if (audioSource != null && hitClip != null)
+        {
+            audioSource.PlayOneShot(hitClip);
+        }
+
+        // MULAI HIT STOP SEQUENCE
+        StartCoroutine(HitStopSequence());
+
         if (DamageTextManager.Instance != null)
         {
             Vector3 damagePosition = transform.position + Vector3.up * 2f;
-
 
             DamageType damageType = DamageType.Normal;
             if (damage >= attackDamage * 1.8f)
@@ -165,6 +179,7 @@ public class ZombieEnemy : MonoBehaviour
 
             DamageTextManager.Instance.ShowDamageText(damagePosition, damage, damageType);
         }
+
         if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth, maxHealth);
@@ -173,6 +188,27 @@ public class ZombieEnemy : MonoBehaviour
         if (currentHealth <= 0f)
         {
             Die();
+            if (audioSource != null && KillClip != null)
+            {
+                audioSource.PlayOneShot(KillClip);
+            }
+        }
+    }
+
+    // COROUTINE UNTUK MEMBERIKAN JEDA SETELAH KENA HIT
+    private IEnumerator HitStopSequence()
+    {
+        isStunned = true;
+        agent.isStopped = true;
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isAttacking", false);
+
+        yield return new WaitForSeconds(hitStopDuration);
+
+        if (!isDead) // PASTIKAN ZOMBIE MASIH HIDUP
+        {
+            isStunned = false;
+            // Zombie akan otomatis melanjutkan gerakan di Update()
         }
     }
 
@@ -193,6 +229,10 @@ public class ZombieEnemy : MonoBehaviour
         {
             Destroy(gameObject);
             GameObject explosion = Instantiate(explosionEffect, explosionPoint.position, Quaternion.identity);
+            if (audioSource != null && deathClip != null)
+            {
+                AudioSource.PlayClipAtPoint(deathClip, explosionPoint.position);
+            }
             Destroy(explosion, 1f);
         }
     }

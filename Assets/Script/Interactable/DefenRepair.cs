@@ -12,9 +12,9 @@ public class DefenRepair : Interactable
 
     [Header("Repair Settings")]
     public float repairTime = 3f;
-    public string brokenPrompt = "Press E to Repair";
-    public string repairingPrompt = "Repairing...";
-    public string activePrompt = "Weapon Active";
+    public Sprite brokenPrompt;
+    public Sprite repairingPrompt;
+    public Sprite activePrompt;
 
     [Header("UI Elements")]
     public GameObject progressUI;
@@ -141,11 +141,12 @@ public class DefenRepair : Interactable
     void UpdatePrompt()
     {
         if (isRepairing)
-            PromptMessage = repairingPrompt;
+            PromptIcon = repairingPrompt;
+
         else if (isBroken)
-            PromptMessage = brokenPrompt;
+            PromptIcon = brokenPrompt;
         else
-            PromptMessage = activePrompt;
+            PromptIcon = activePrompt;
     }
 
     public void StopRepair()

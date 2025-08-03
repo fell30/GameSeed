@@ -1,13 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public abstract class Interactable : MonoBehaviour
 {
     public bool CanInteract = true;
-    public String PromptMessage;
+    public string PromptMessage;
+    public Sprite PromptIcon; // <- Tambahan ikon unik
     public UnityEvent OnInteract;
 
     public virtual void BaseInteract()
@@ -16,6 +15,7 @@ public abstract class Interactable : MonoBehaviour
             return;
         Interact();
     }
+
     protected virtual void Interact()
     {
         OnInteract?.Invoke();

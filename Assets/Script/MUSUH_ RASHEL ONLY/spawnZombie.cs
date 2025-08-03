@@ -168,9 +168,11 @@ public class spawnZombie : MonoBehaviour
         // Keep warning visible for specified duration
         yield return new WaitForSeconds(warningDuration);
 
-        // Hide warning panel
         warningPanel.SetActive(false);
+
+        waveAudio.loop = false; // Tambahkan ini
         waveAudio.Stop();
+
 
         Debug.Log($"<color=yellow>[WaveSpawner] {warningMessage}</color>");
     }
