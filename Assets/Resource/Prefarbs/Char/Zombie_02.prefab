@@ -191,11 +191,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2858215411511622855, guid: c2b1f5f5159bee741b579dccf85bd9b1,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cca7f709a73c09b4faa69eebe804c248,
+        type: 3}
     - target: {fileID: 3137495619579211172, guid: c2b1f5f5159bee741b579dccf85bd9b1,
         type: 3}
       propertyPath: m_Speed
       value: 2.12
       objectReference: {fileID: 0}
+    - target: {fileID: 3215517968257407089, guid: c2b1f5f5159bee741b579dccf85bd9b1,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2e4cf0e3804248744bfc4418f3cdc1c9,
+        type: 3}
     - target: {fileID: 4130696043678063844, guid: c2b1f5f5159bee741b579dccf85bd9b1,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -293,9 +305,9 @@ MonoBehaviour:
   player: {fileID: 0}
   targetBase: {fileID: 0}
   audioSource: {fileID: -3447702939192408554}
-  attackClip: {fileID: 0}
+  deathClip: {fileID: 8300000, guid: b462b4e27d6b31d499241382f0b41483, type: 3}
   hitClip: {fileID: 8300000, guid: c4fdb633f19bf3e489df806740622737, type: 3}
-  deathClip: {fileID: 8300000, guid: ebf91529bd9e123468b3eda36b69fd83, type: 3}
+  KillClip: {fileID: 0}
   healthBar: {fileID: 3926853577801756924}
   explosionEffect: {fileID: 1562453854853401153, guid: 6463cb20471bea94493fc7702a304b1d,
     type: 3}

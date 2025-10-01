@@ -27,8 +27,8 @@ public class PlayerMotor : MonoBehaviour
         // Initialize components
         controller = GetComponent<CharacterController>();
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
 
         // Validate components
         if (controller == null)

@@ -126,15 +126,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CanInteract: 1
   PromptMessage: 
+  PromptIcon: {fileID: 0}
   OnInteract:
     m_PersistentCalls:
       m_Calls: []
   weaponDuration: 20
   startBroken: 1
   repairTime: 3
-  brokenPrompt: Press E to Repair
-  repairingPrompt: Repairing...
-  activePrompt: Weapon Active
+  brokenPrompt: {fileID: 0}
+  repairingPrompt: {fileID: 0}
+  activePrompt: {fileID: 0}
   progressUI: {fileID: 6928939655111348648}
   progressBar: {fileID: 103992032893893983}
   progressText: {fileID: 22634311611463231}
@@ -10928,6 +10929,12 @@ PrefabInstance:
       propertyPath: mode
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1444468780085486089, guid: d59cbe3a99069464fb1ab30f74486c2c,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2e4cf0e3804248744bfc4418f3cdc1c9,
+        type: 3}
     - target: {fileID: 2315376100692839098, guid: d59cbe3a99069464fb1ab30f74486c2c,
         type: 3}
       propertyPath: m_AnchorMax.x

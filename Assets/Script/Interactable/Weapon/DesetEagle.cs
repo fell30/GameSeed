@@ -68,7 +68,7 @@ public class Pistol : MonoBehaviour
 
     void Shoot()
     {
-        nextTimeToFire = Time.time + fireRate;
+        nextTimeToFire = Time.time + 1f / fireRate;
         currentClipAmmo--;
         UpdateAmmoUI();
         animator.SetTrigger("Shoot");

@@ -21,9 +21,9 @@ public class ZombieFast : MonoBehaviour
     public Transform targetBase;
     private bool isTowerDestroyed = false;
     public AudioSource audioSource;
-    public AudioClip attackClip;
-    public AudioClip hitClip;
     public AudioClip deathClip;
+    public AudioClip hitClip;
+    public AudioClip KillClip;
 
     [Header("Health Bar")]
     public EnemyHealthBar healthBar;
@@ -179,10 +179,7 @@ public class ZombieFast : MonoBehaviour
         agent.isStopped = true;
         animator.SetBool("isRunning", false);
         animator.SetBool("isAttacking", true);
-        if (audioSource != null && attackClip != null)
-        {
-            audioSource.PlayOneShot(attackClip);
-        }
+
 
 
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
@@ -248,6 +245,7 @@ public class ZombieFast : MonoBehaviour
 
         if (currentHealth <= 0f)
         {
+            PlaySound(deathClip);
             Die();
         }
     }
@@ -283,6 +281,7 @@ public class ZombieFast : MonoBehaviour
         {
             Destroy(gameObject);
             GameObject explosion = Instantiate(explosionEffect, explosionPoint.position, Quaternion.identity);
+            AudioSource.PlayClipAtPoint(deathClip, explosionPoint.position);
             Destroy(explosion, 1f);
         }
     }

@@ -136,6 +136,16 @@ PrefabInstance:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 8808019524016067987}
+    - target: {fileID: 1780547438470541506, guid: c2b1f5f5159bee741b579dccf85bd9b1,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1780547438470541506, guid: c2b1f5f5159bee741b579dccf85bd9b1,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2089395471838923213, guid: c2b1f5f5159bee741b579dccf85bd9b1,
         type: 3}
       propertyPath: m_Name
@@ -191,10 +201,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2858215411511622855, guid: c2b1f5f5159bee741b579dccf85bd9b1,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cca7f709a73c09b4faa69eebe804c248,
+        type: 3}
     - target: {fileID: 3137495619579211172, guid: c2b1f5f5159bee741b579dccf85bd9b1,
         type: 3}
       propertyPath: m_Speed
       value: 1.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 3215517968257407089, guid: c2b1f5f5159bee741b579dccf85bd9b1,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2e4cf0e3804248744bfc4418f3cdc1c9,
+        type: 3}
+    - target: {fileID: 5839798569781692824, guid: c2b1f5f5159bee741b579dccf85bd9b1,
+        type: 3}
+      propertyPath: m_Value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9036870691959605267, guid: c2b1f5f5159bee741b579dccf85bd9b1,
         type: 3}

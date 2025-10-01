@@ -10,10 +10,16 @@ public class TowerHealth : MonoBehaviour
     [Header("UI Elements")]
     public Slider healthSlider;
 
+    [Header("Audio Setting")]
+    public AudioClip damageSound;
+    public AudioClip deathSound;
+    private AudioSource audioSource;
+
     void Start()
     {
         // Set health ke maksimum di awal
         currentHealth = maxHealth;
+        audioSource = GetComponent<AudioSource>();
 
         // Setup slider
         if (healthSlider != null)
@@ -76,6 +82,10 @@ public class TowerHealth : MonoBehaviour
         // - Spawn explosion effect
         // - Update game state
         // - Show game over screen
+        if (audioSource != null && deathSound != null)
+        {
+            audioSource.PlayOneShot(deathSound);
+        }
         Destroy(gameObject);
 
         // Sementara ini cuma log

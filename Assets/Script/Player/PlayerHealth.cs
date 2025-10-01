@@ -19,12 +19,15 @@ public class PlayerHealth : MonoBehaviour
     public float duration;
     public float FadeSpeed;
     private float durationTimer;
+    public UI_Manager uiManager;
+    private bool isDead = false;
 
 
     void Start()
     {
         health = maxHealth;
         Overlay.color = new Color(Overlay.color.r, Overlay.color.g, Overlay.color.b, 0);
+
     }
     void Update()
     {
@@ -43,14 +46,6 @@ public class PlayerHealth : MonoBehaviour
                 Overlay.color = new Color(Overlay.color.r, Overlay.color.g, Overlay.color.b, tempAlpha);
 
             }
-        }
-        if (Input.GetKeyDown(KeyCode.H)) // For testing purposes
-        {
-            TakeDamage(10f);
-        }
-        if (Input.GetKeyDown(KeyCode.J)) // For testing purposes
-        {
-            RestoreHealth(10f);
         }
 
     }
@@ -87,6 +82,12 @@ public class PlayerHealth : MonoBehaviour
         lerpTimer = 0f;
         durationTimer = 0f;
         Overlay.color = new Color(Overlay.color.r, Overlay.color.g, Overlay.color.b, 1);
+        if (health <= 0 && !isDead)
+        {
+            isDead = true;
+            uiManager.ShowLoseGamePanel();
+            Debug.Log("Player is dead");
+        }
     }
     public void RestoreHealth(float HealAmount)
     {

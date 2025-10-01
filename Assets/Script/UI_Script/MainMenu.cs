@@ -133,6 +133,7 @@ public class MainMenu : MonoBehaviour
 
         // ACTIVATE SCENE
         operation.allowSceneActivation = true;
+        Time.timeScale = 1f;
     }
 
     private void UpdateLoadingUI(float progress)
